@@ -46,7 +46,7 @@ namespace AnimalPages.Data
         private List<string> _comments { get; set; }
 
 
-        public T SetAnimalValues<T>( List<string> facts, List<byte[]> photos, List<string> personelComments) where T : AnimalBase, new()
+        public T SetAnimalValues<T>(List<string>foods, List<string> facts, List<string> comments) where T : AnimalBase, new()
         {
             // create methods for each of these questions
             T animal = new T();
@@ -58,7 +58,7 @@ namespace AnimalPages.Data
             animal.Name = animalName;
             string animalDescription = DescriptionSetter();
             animal._description = animalDescription;
-            List<string> initialAnimalFoods = FoodAdder(_foods);
+            List<string> initialAnimalFoods = FoodSetter();
             animal._foods = initialAnimalFoods;
             List<string> animalColors = ColorSetter();
             animal._colors = animalColors;
@@ -66,10 +66,10 @@ namespace AnimalPages.Data
             animal._weight = animalWeight;
             string animalNativeLocation = NativeLocationSetter();
             animal._nativeLocation = animalNativeLocation;
-            List<string> animalFacts = FactsAdder(_facts);
+            List<string> animalFacts = FactsSetter();
             animal._facts = animalFacts;
             Console.WriteLine("**no current method to add photos**"); // add this method when not using a console for UI
-            List<string> animalComments = CommentAdder(_comments);
+            List<string> animalComments = CommentSetter();
             animal._comments = animalComments;
 
             return animal;
@@ -102,6 +102,34 @@ namespace AnimalPages.Data
             string userInput = Console.ReadLine();
             var description = userInput;
             return description;
+        }
+
+        public List<string> FoodSetter()
+        {
+            Console.WriteLine("Enter 1 if you have foods to add. Enter any other key if not.");
+            int userInput = 0;
+            List<string> foods = new List<string>();
+            try
+            {
+                userInput = int.Parse(Console.ReadLine());
+            }
+            catch (Exception)
+            {
+                return foods;
+            }
+            if (userInput == 1)
+            {
+                Console.WriteLine("Please enter the foods you wish to add");
+                string stringToBeListed = Console.ReadLine();
+                List<string> newList = ListCreator(stringToBeListed);
+                foreach (var item in newList)
+                    foods.Add(item);
+                return foods;
+            }
+            else
+            {
+                return foods;
+            }
         }
 
         public List<string> FoodAdder(List<string> foods)
@@ -169,11 +197,20 @@ namespace AnimalPages.Data
         }
 
 
-        public List<string> FactsAdder(List<string>_facts)
+        public List<string> FactsSetter()
         {
-            List<string> facts= InputCheckerSentences(_facts, "Do you have any interesting facts you would like to add for this animal? " +
+            List<string> facts = InputCheckerSentences([],  "Do you have any interesting facts you would like to add for this animal? " +
                 "Enter 1 if you so, Enter any other key if not for now.", "Please enter a fact you would like to add.");
             return facts;
+
+        }
+
+
+        public List<string> FactsAdder(List<string> facts)
+        {
+            List<string> updatedFacts= InputCheckerSentences(facts, "Do you have any interesting facts you would like to add for this animal? " +
+                "Enter 1 if you so, Enter any other key if not for now.", "Please enter a fact you would like to add.");
+            return updatedFacts;
 
         }
 
@@ -182,6 +219,13 @@ namespace AnimalPages.Data
             //add this method when not using console for UI.
         }
 
+
+        public List<string> CommentSetter()
+        {
+            List<string> updatedComments = InputCheckerSentences([], "Enter 1 if there are comments or thoughts you would like to add.enter any other key if not.",
+                "Please enter your comment or thought.");
+            return updatedComments;
+        }
 
         public List<string> CommentAdder(List<string> comments)
         {
